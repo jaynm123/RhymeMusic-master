@@ -1,24 +1,19 @@
 package priv.valueyouth.rhymemusic.application;
 
 import android.app.Application;
-import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.List;
+import java.io.IOException;
 
-import priv.valueyouth.rhymemusic.fragment.LocalMusicFragment;
 import priv.valueyouth.rhymemusic.service.MusicService;
+import priv.valueyouth.rhymemusic.util.Config;
 
 /**
  * ...
@@ -46,7 +41,12 @@ public class MusicApplication extends Application implements ServiceConnection
     {
         super.onCreate();
         Log.d(TAG, SUB + "onCreated");
-
+        //本地文件初始化
+        try {
+            Config.init(getApplicationContext());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         mediaPlayer = new MediaPlayer();
         bindService();
 

@@ -1,8 +1,11 @@
 package priv.valueyouth.rhymemusic.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -21,6 +24,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.File;
+
 import priv.valueyouth.rhymemusic.R;
 import priv.valueyouth.rhymemusic.adapter.SectionsPagerAdapter;
 import priv.valueyouth.rhymemusic.application.MusicApplication;
@@ -29,6 +34,7 @@ import priv.valueyouth.rhymemusic.help.ActivityCollector;
 import priv.valueyouth.rhymemusic.service.MusicService;
 import priv.valueyouth.rhymemusic.util.Audio;
 import priv.valueyouth.rhymemusic.util.AudioUtil;
+import priv.valueyouth.rhymemusic.util.MyLogger;
 
 
 public class MainActivity extends BaseActivity
@@ -180,16 +186,18 @@ public class MainActivity extends BaseActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                Intent intent = new Intent(MainActivity.this, PlaybackActivity.class);
-                if (application.getMediaPlayer().isPlaying() && !application.isOnline()) {
-                    startActivity(intent);
-                } else if (application.isOnline()) {
-                    Snackbar.make(v, "在线功能还在完善中...", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                } else {
-                    Snackbar.make(v, "请选择一首歌曲播放", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
+                scanFile(MainActivity.this, Environment.getExternalStorageDirectory()
+                        .getAbsolutePath() + "/master" + "/audio/一点点.mp3");
+//                Intent intent = new Intent(MainActivity.this, PlaybackActivity.class);
+//                if (application.getMediaPlayer().isPlaying() && !application.isOnline()) {
+//                    startActivity(intent);
+//                } else if (application.isOnline()) {
+//                    Snackbar.make(v, "在线功能还在完善中...", Snackbar.LENGTH_LONG)
+//                            .setAction("Action", null).show();
+//                } else {
+//                    Snackbar.make(v, "请选择一首歌曲播放", Snackbar.LENGTH_LONG)
+//                            .setAction("Action", null).show();
+//                }
                 break;
             default:
                 break;
@@ -209,7 +217,26 @@ public class MainActivity extends BaseActivity
 
         Snackbar.make(view, tips, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
+
     }
+
+    /**
+     * 通知媒体库更新文件
+     * @param context
+     * @param filePath 文件全路径
+     *
+     * */
+    public void scanFile(Context context, String filePath) {
+        MyLogger.CLog().e("audio path filePath = "+filePath);
+//        Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//        scanIntent.setData(Uri.fromFile(new File(filePath)));
+//        context.sendBroadcast(scanIntent);
+
+        Uri contentUri = Uri.fromFile(new File(filePath));
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,contentUri);
+        context.sendBroadcast(mediaScanIntent);
+    }
+
 
     /**
      * 初始化组件

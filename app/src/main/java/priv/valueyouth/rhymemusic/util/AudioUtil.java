@@ -3,27 +3,17 @@ package priv.valueyouth.rhymemusic.util;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
-import android.util.Log;
 
-import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
  * 该类会返回一个带有音乐信息的List
  * Created by Idea on 2016/5/4.
  */
-public class AudioUtil
-{
+public class AudioUtil {
     private static final String TAG = "RhymeMusic";
     private static final String SUB = "[AudioUtil]#";
 
@@ -57,28 +47,26 @@ public class AudioUtil
 
     /**
      * 返回一个带有音乐信息的List
+     *
      * @param context 环境参数
      * @return 返回一个带有音乐信息的List
      */
-    public static ArrayList<Audio> getAudioList(Context context)
-    {
+    public static ArrayList<Audio> getAudioList(Context context) {
         ArrayList<Audio> audioList = new ArrayList<Audio>();
         ContentResolver resolver = context.getContentResolver();
         Cursor cursor = resolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 AUDIO_KEYS, null, null, null);
 
-        for ( cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext() )
-        {
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             Bundle bundle = new Bundle();
 
-            for ( int i = 0; i < AUDIO_KEYS.length; i++ )
-            {
+
+            for (int i = 0; i < AUDIO_KEYS.length; i++) {
                 final String key = AUDIO_KEYS[i];
                 final int colIndex = cursor.getColumnIndex(key);
                 final int type = cursor.getType(colIndex);
 
-                switch (type)
-                {
+                switch (type) {
                     case Cursor.FIELD_TYPE_BLOB:
                         break;
 
@@ -101,7 +89,8 @@ public class AudioUtil
                         break;
                 }
             }
-
+            String path = bundle.getString(MediaStore.Audio.Media.DATA);
+            MyLogger.CLog().e("audio path = "+path);
             Audio audio = new Audio(bundle);
             audioList.add(audio);
         }

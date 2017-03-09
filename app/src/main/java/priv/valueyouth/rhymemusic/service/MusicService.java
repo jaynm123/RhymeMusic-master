@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
@@ -13,11 +12,10 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
@@ -174,6 +172,7 @@ public class MusicService extends Service
 
     }
 
+
     /**
      * 初始化播放器
      */
@@ -187,6 +186,7 @@ public class MusicService extends Service
         /*获取本地广播实例*/
         manager = application.getManager();
     }
+
 
     /**
      * 更新界面，显示当前播放音乐。
